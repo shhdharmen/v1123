@@ -7,7 +7,17 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "contributors:add": "all-contributors add",
+    "hooks:pre-commit": "node hooks/pre-commit.js",
+    "commit": "cz",
+    "deploy": "ng deploy --base-href=https://shhdharmen.github.io/v1123/",
+    "copy": "cpx README.md dist/my-toaster-lib",
+    "build:lib": "ng build my-toaster-lib --prod && npm run copy",
+    "test:lib": "ng test my-toaster-lib",
+    "test:lib:headless": "cross-env CI=true npm run test:lib",
+    "postbuild:lib": "npm run build --prefix projects/my-toaster-lib",
+    "semantic-release": "semantic-release"
   },
   "private": true,
   "dependencies": {
@@ -37,9 +47,44 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "ng-packagr": "^11.0.0",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.1.5"
+    "typescript": "~4.1.5",
+    "cpx": "^1.5.0",
+    "jsonc-parser": "^3.0.0",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "semantic-release": "^17.3.8",
+    "@commitlint/cli": "^12.0.1",
+    "@commitlint/config-conventional": "^12.0.1",
+    "git-cz": "^4.7.6",
+    "all-contributors-cli": "^6.20.0",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "husky": "^5.1.2",
+    "cross-env": "^7.0.3",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.2",
+    "@types/jest": "^26.0.20",
+    "@ngneat/spectator": "^7.1.0",
+    "angular-cli-ghpages": "^1.0.0-rc.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,scss,ts,html,component.html}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "npm run hooks:pre-commit && lint-staged"
+    }
   }
 }
